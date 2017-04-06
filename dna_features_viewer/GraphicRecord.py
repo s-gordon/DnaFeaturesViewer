@@ -64,7 +64,7 @@ class GraphicRecord:
 
         ax.set_xlim(0, self.sequence_length)
 
-    def plot_feature(self, ax, feature, level, linewidth=1.0):
+    def plot_feature(self, ax, feature, level, linewidth=1.0, thick_head=True):
         """Create an Arrow Matplotlib patch with the feature's coordinates.
 
         The Arrow points in the direction of the feature's strand.
@@ -76,10 +76,17 @@ class GraphicRecord:
         """
         x1, x2 = feature.start, feature.end
 
+        if thick_head is True:
+            head_width = feature.thickness*1.8
+            head_multiplier = 2
+        else:
+            head_width = feature.thickness
+            head_multiplier = 1
+
         if feature.strand == -1:
             x1, x2 = x2, x1
-        head_length = 5 if feature.strand in (-1, 1) else 0.001
-        arrowstyle = mpatches.ArrowStyle.Simple(head_width=feature.thickness,
+        head_length = head_multiplier*6 if feature.strand in (-1, 1) else 0.001
+        arrowstyle = mpatches.ArrowStyle.Simple(head_width=head_width,
                                                 tail_width=feature.thickness,
                                                 head_length=head_length)
         y = self.feature_level_width * level
